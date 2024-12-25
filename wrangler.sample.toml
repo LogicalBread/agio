@@ -1,11 +1,14 @@
 name = "agio"
-main = "src/index.ts"
+main = "src/bin/app.ts"
 compatibility_date = "2024-12-25"
 
 # compatibility_flags = [ "nodejs_compat" ]
 
-# [vars]
-# MY_VAR = "my-variable"
+[vars]
+ANTHROPIC_TOKEN = "xxx"
+DISCORD_TOKEN = "xxx"
+DISCORD_APPLICATION_ID = "xxx"
+DISCORD_PUBLIC_KEY = "xxx"
 
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"

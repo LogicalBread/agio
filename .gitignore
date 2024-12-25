@@ -10,3 +10,11 @@ node_modules/
 .env.production
 .dev.vars
 wrangler.toml
+
+# sensitive
+personality/*
+!personality/.gitkeep
+!personality/example.json
+
+# gen
+src/gen

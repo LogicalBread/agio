@@ -2,16 +2,27 @@
   "name": "agio",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify",
+    "deploy": "bun run setup:all && wrangler deploy --minify",
+    "ngrok": "ngrok http 8787",
     "lint": "biome lint ./src",
-    "format": "biome format --write ./src"
+    "format": "biome format --write ./src",
+    "setup:all": "bun run setup:targets && bun run setup:commands",
+    "setup:targets": "bun run ./src/bin/genTargets.ts",
+    "setup:commands": "bun run ./src/bin/registerSlashCommands.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "0.33.1",
+    "discord-api-types": "0.37.114",
+    "discord-interactions": "4.1.0",
     "hono": "^4.6.14"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@cloudflare/workers-types": "^4.20241218.0",
+    "@types/bun": "1.1.14",
+    "discord.js": "14.16.3",
+    "glob": "11.0.0",
+    "ngrok": "5.0.0-beta.2",
     "wrangler": "^3.96.0"
   }
 }
