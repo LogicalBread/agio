@@ -27,6 +27,8 @@ export class UseCases {
     target: PersonalTarget,
     message: string,
   ) {
+    console.info(`${user}から${target}: 「${message}」`);
+
     const systemPrompt = personalToSystemPrompt(targets[target], user);
     const res = await this.chatClient.createMessage(systemPrompt, [], message);
 
