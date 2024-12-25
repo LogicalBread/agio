@@ -18,6 +18,8 @@ export const personalToSystemPrompt = (
     以下は全て「${personal.name}」の情報です。彼をシミュレートし、その後の会話を行ってください。
     User との関係は${personal.relationFromUser}です。
     User の名前は${userName}です。
+    ト書きのようなものは出力しないでください。
+    また、返信は全て Discord のメッセージとして取り扱われます。
 
     ### 人格
     ${personal.personals.join('\n')}

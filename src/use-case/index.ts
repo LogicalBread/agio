@@ -30,7 +30,9 @@ export class UseCases {
     const systemPrompt = personalToSystemPrompt(targets[target], user);
     const res = await this.chatClient.createMessage(systemPrompt, [], message);
 
-    await this.discordClient.sendMessage(discordResponseToken, res);
+    const returnMessage = `> 「${message}」 to ${targets[target].name}\n\n${res}`;
+
+    await this.discordClient.sendMessage(discordResponseToken, returnMessage);
 
     // const latestNumber = await this.chatRepository.getLatestMessageCount(
     //   channelId,
