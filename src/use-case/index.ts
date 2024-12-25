@@ -21,7 +21,7 @@ export class UseCases {
 
   /** 話す */
   async chat(
-    channelId: string,
+    _channelId: string,
     discordResponseToken: string,
     user: string,
     target: PersonalTarget,
@@ -32,21 +32,21 @@ export class UseCases {
 
     await this.discordClient.sendMessage(discordResponseToken, res);
 
-    const latestNumber = await this.chatRepository.getLatestMessageCount(
-      channelId,
-      target,
-    );
+    // const latestNumber = await this.chatRepository.getLatestMessageCount(
+    //   channelId,
+    //   target,
+    // );
 
-    await this.chatRepository.persistMessages(channelId, target, [
-      { role: 'user', content: message, index: latestNumber + 1 },
-      { role: 'system', content: res, index: latestNumber + 2 },
-    ]);
+    // await this.chatRepository.persistMessages(channelId, target, [
+    //   { role: 'user', content: message, index: latestNumber + 1 },
+    //   { role: 'system', content: res, index: latestNumber + 2 },
+    // ]);
 
     return res;
   }
 
   /** 記憶をリセットする */
-  async reset(channelId: string, target: PersonalTarget) {
-    await this.chatRepository.resetMessages(channelId, target);
+  async reset(_channelId: string, _target: PersonalTarget) {
+    // await this.chatRepository.resetMessages(channelId, target);
   }
 }
