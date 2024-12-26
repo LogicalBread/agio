@@ -89,7 +89,9 @@ app
                 uc.chat(
                   interaction.data.guild_id ?? '',
                   interaction.token,
-                  interaction.message?.author.username ?? '',
+                  interaction.member?.nick ??
+                    interaction.member?.user.global_name ??
+                    '',
                   target,
                   message ?? '',
                 ),
