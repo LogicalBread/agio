@@ -2,8 +2,7 @@
   "name": "agio",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "bun run setup:all && wrangler deploy --minify",
-    "ngrok": "ngrok http 8787",
+    "deploy": "NODE_ENV=production bun run setup:all && wrangler deploy --minify",
     "lint": "biome lint ./src",
     "format": "biome format --write ./src",
     "setup:all": "bun run setup:targets && bun run setup:commands",
@@ -22,7 +21,6 @@
     "@types/bun": "1.1.14",
     "discord.js": "14.16.3",
     "glob": "11.0.0",
-    "ngrok": "5.0.0-beta.2",
     "wrangler": "^3.96.0"
   }
 }
