@@ -35,8 +35,8 @@ export class ClaudeClient implements ChatClientExt {
     ];
 
     const res = await this.client.messages.create({
-      model: 'claude-3-5-haiku-latest',
-      max_tokens: 2048,
+      model: 'claude-3-7-sonnet-latest',
+      max_tokens: 4096,
       system,
       messages,
     });
