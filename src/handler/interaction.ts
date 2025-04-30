@@ -94,7 +94,7 @@ app
                 uc.chat(
                   interaction.channel.id,
                   interaction.token,
-                  interaction.user?.id ?? '',
+                  interaction.member?.user.id ?? '',
                   interaction.member?.nick ??
                     interaction.member?.user.global_name ??
                     '',
@@ -145,7 +145,7 @@ app
                 uc.reset(
                   interaction.channel.id,
                   interaction.token,
-                  interaction.user?.id ?? '',
+                  interaction.member?.user.id ?? '',
                   interaction.member?.nick ??
                     interaction.member?.user.global_name ??
                     '',
