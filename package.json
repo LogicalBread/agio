@@ -2,7 +2,7 @@
   "name": "agio",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "NODE_ENV=production bun run setup:all && wrangler deploy --minify",
+    "deploy": "NODE_ENV=production bun run setup:all && wrangler d1 migrations apply -y --remote agio && wrangler deploy --minify",
     "lint": "biome lint ./src",
     "format": "biome format --write ./src",
     "setup:all": "bun run setup:targets && bun run setup:commands",
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.40.1",
-    "discord-api-types": "0.37.118",
+    "discord-api-types": "0.38.1",
     "discord-interactions": "4.1.0",
     "hono": "4.6.20",
     "openai": "4.96.2"
@@ -22,6 +22,6 @@
     "@types/bun": "1.2.1",
     "discord.js": "14.17.3",
     "glob": "11.0.1",
-    "wrangler": "3.107.2"
+    "wrangler": "4.14.0"
   }
 }
