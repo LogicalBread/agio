@@ -101,7 +101,7 @@ export class UseCases {
       '[システムからのメッセージ]: あなたの記憶をリセットします。言い残したことはありますか？',
     );
 
-    const returnMessage = `> ${targets[target].name}\n\n${res}`;
+    const returnMessage = `> 「${targets[target].name}」の記憶を消去します。\n\n${res}`;
 
     await this.discordClient.sendMessage(discordResponseToken, returnMessage);
 

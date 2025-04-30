@@ -2,7 +2,6 @@ import { Hono } from 'hono';
 import { verifyDiscordInteractionMiddleware } from '../middleware/verify';
 import { UseCases } from '../use-case';
 import { ChatRepositoryImpl } from '../repository/chat';
-import { ClaudeClient } from '../client/claude';
 import type { Env } from '../env';
 import {
   ApplicationCommandOptionType,
@@ -14,6 +13,7 @@ import {
 import { DiscordClientImpl } from '../client/discord';
 import { logger } from 'hono/logger';
 import { targetFromStr } from '../gen/target';
+import { OpenAiClient } from '../client/openai';
 
 export const app = new Hono<{ Bindings: Env }>();
 
@@ -25,8 +25,13 @@ app
   .post('/interactions', verifyDiscordInteractionMiddleware, async (c) => {
     const chatRepository = new ChatRepositoryImpl(c.env.DB);
     const discordClient = new DiscordClientImpl(c.env.DISCORD_APPLICATION_ID);
-    const chatClient = new ClaudeClient(c.env.ANTHROPIC_API_KEY);
-    const uc = new UseCases(chatClient, discordClient, chatRepository);
+    // const chatClient = new ClaudeClient(c.env.ANTHROPIC_API_KEY);
+    const openAIChatClient = new OpenAiClient(
+      'https://generativelanguage.googleapis.com/v1beta/openai/',
+      c.env.GEMINI_API_KEY,
+      'gemini-2.0-flash',
+    );
+    const uc = new UseCases(openAIChatClient, discordClient, chatRepository);
     const interaction = await c.req.json<APIInteraction>();
 
     try {

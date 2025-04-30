@@ -13,7 +13,8 @@
     "@anthropic-ai/sdk": "0.40.1",
     "discord-api-types": "0.37.118",
     "discord-interactions": "4.1.0",
-    "hono": "4.6.20"
+    "hono": "4.6.20",
+    "openai": "4.96.2"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
