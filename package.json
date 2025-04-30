@@ -2,7 +2,7 @@
   "name": "agio",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "NODE_ENV=production bun run setup:all && wrangler d1 migrations apply -y --remote agio && wrangler deploy --minify",
+    "deploy": "NODE_ENV=production bun run setup:all && wrangler d1 migrations apply --remote agio && wrangler deploy --minify",
     "lint": "biome lint ./src",
     "format": "biome format --write ./src",
     "setup:all": "bun run setup:targets && bun run setup:commands",
