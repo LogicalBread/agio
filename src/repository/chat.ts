@@ -17,7 +17,7 @@ export class ChatRepositoryImpl implements ChatRepositoryExt {
   ): Promise<number> {
     const res = await this.db
       .prepare(
-        'SELECT MAX(index_number) FROM messages WHERE channel_id = ? AND user_id = ? AND target = ?',
+        'SELECT MAX(index_number) AS index_number FROM messages WHERE channel_id = ? AND user_id = ? AND target = ?',
       )
       .bind(channelId, userId, target)
       .first<{ index_number: number }>();
