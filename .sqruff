@@ -1,0 +1,20 @@
+[sqruff]
+max_line_length = 120
+; NOTE: ルールの無効化
+; CV11: 型キャストの一貫性 (なんかバグって誤判定された)
+exclude_rules = CV11
+large_file_skip_byte_limit = 0
+dialect = postgres
+rules = all
+
+[sqruff:layout:type:comma]
+line_position = leading
+
+[sqruff:indentation]
+tab_space_size = 4
+indent_unit = tab
+
+; sqlx で使う hoge.fields AS "arr!: Vec<_>" みたいなもののために許可
+[sqruff:rules:references.special_chars]
+additional_allowed_characters = "<>_?!:"
+allow_space_in_identifier = True

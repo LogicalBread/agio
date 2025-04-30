@@ -13,7 +13,7 @@ import {
 } from 'discord-api-types/v10';
 import { DiscordClientImpl } from '../client/discord';
 import { logger } from 'hono/logger';
-import { targetFromStr, targets } from '../gen/target';
+import { targetFromStr } from '../gen/target';
 
 export const app = new Hono<{ Bindings: Env }>();
 
@@ -23,7 +23,7 @@ app
     return c.text(`Hello ${c.env.DISCORD_APPLICATION_ID}`);
   })
   .post('/interactions', verifyDiscordInteractionMiddleware, async (c) => {
-    const chatRepository = new ChatRepositoryImpl(c.env.db);
+    const chatRepository = new ChatRepositoryImpl(c.env.DB);
     const discordClient = new DiscordClientImpl(c.env.DISCORD_APPLICATION_ID);
     const chatClient = new ClaudeClient(c.env.ANTHROPIC_API_KEY);
     const uc = new UseCases(chatClient, discordClient, chatRepository);
@@ -87,8 +87,9 @@ app
 
               c.executionCtx.waitUntil(
                 uc.chat(
-                  interaction.data.guild_id ?? '',
+                  interaction.channel.id,
                   interaction.token,
+                  interaction.user?.id ?? '',
                   interaction.member?.nick ??
                     interaction.member?.user.global_name ??
                     '',
@@ -135,15 +136,20 @@ app
                 });
               }
 
-              await uc.reset(interaction.guild_id, target);
-
-              const personal = targets[target];
+              c.executionCtx.waitUntil(
+                uc.reset(
+                  interaction.channel.id,
+                  interaction.token,
+                  interaction.user?.id ?? '',
+                  interaction.member?.nick ??
+                    interaction.member?.user.global_name ??
+                    '',
+                  target,
+                ),
+              );
 
               return c.json({
-                type: InteractionResponseType.ChannelMessageWithSource,
-                data: {
-                  content: `${personal.name}の記憶を消去しました。`,
-                },
+                type: InteractionResponseType.DeferredChannelMessageWithSource,
               });
             }
             default: {

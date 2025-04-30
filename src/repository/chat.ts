@@ -1,7 +1,7 @@
 import type { D1Database } from '@cloudflare/workers-types';
 import type { Message } from '../domain/model/message';
-import type { PersonalTarget } from '../domain/model/personal';
 import type { ChatRepositoryExt } from '../domain/repository/chat';
+import type { PersonalTarget } from '../gen/target';
 
 export class ChatRepositoryImpl implements ChatRepositoryExt {
   private readonly db;
@@ -12,13 +12,14 @@ export class ChatRepositoryImpl implements ChatRepositoryExt {
 
   async getLatestMessageCount(
     channelId: string,
+    userId: string,
     target: PersonalTarget,
   ): Promise<number> {
     const res = await this.db
       .prepare(
-        'SELECT MAX(index_number) FROM messages WHERE channel_id = ? AND target = ?',
+        'SELECT MAX(index_number) FROM messages WHERE channel_id = ? AND user_id = ? AND target = ?',
       )
-      .bind(channelId, target)
+      .bind(channelId, userId, target)
       .first<{ index_number: number }>();
 
     return res?.index_number ?? 0;
@@ -26,15 +27,16 @@ export class ChatRepositoryImpl implements ChatRepositoryExt {
 
   async persistMessages(
     channelId: string,
+    userId: string,
     target: PersonalTarget,
     messages: Message[],
   ): Promise<void> {
     const prepares = messages.map((m) =>
       this.db
         .prepare(
-          'INSERT INTO messages (channel_id, target, role, content, index_number) VALUES (?, ?, ?, ?, ?)',
+          'INSERT INTO messages (channel_id, user_id, target, role, content, index_number) VALUES (?, ?, ?, ?, ?, ?)',
         )
-        .bind(channelId, target, m.role, m.content, m.index),
+        .bind(channelId, userId, target, m.role, m.content, m.index),
     );
 
     await this.db.batch(prepares);
@@ -42,16 +44,20 @@ export class ChatRepositoryImpl implements ChatRepositoryExt {
 
   async resetMessages(
     channelId: string,
+    userId: string,
     target: PersonalTarget,
   ): Promise<void> {
     await this.db
-      .prepare('DELETE FROM messages WHERE channel_id = ? AND target = ?')
-      .bind(channelId, target)
+      .prepare(
+        'DELETE FROM messages WHERE channel_id = ? AND user_id = ? AND target = ?',
+      )
+      .bind(channelId, userId, target)
       .run();
   }
 
   async fetchMessages(
     channelId: string,
+    userId: string,
     target: PersonalTarget,
   ): Promise<Message[]> {
     type Queryable = {
@@ -62,9 +68,9 @@ export class ChatRepositoryImpl implements ChatRepositoryExt {
 
     const rows = await this.db
       .prepare(
-        'SELECT role, content, index_number FROM messages WHERE channel_id = ? AND target = ?',
+        'SELECT role, content, index_number FROM messages WHERE channel_id = ? AND target = ? AND user_id = ? ORDER BY index_number ASC',
       )
-      .bind(channelId, target)
+      .bind(channelId, target, userId)
       .all<Queryable>();
 
     return rows.results.map((row) => ({
