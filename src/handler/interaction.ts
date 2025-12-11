@@ -26,12 +26,12 @@ app
     const chatRepository = new ChatRepositoryImpl(c.env.DB);
     const discordClient = new DiscordClientImpl(c.env.DISCORD_APPLICATION_ID);
     // const chatClient = new ClaudeClient(c.env.ANTHROPIC_API_KEY);
-    const openAIChatClient = new OpenAiClient(
+    const chatClient = new OpenAiClient(
       'https://generativelanguage.googleapis.com/v1beta/openai/',
       c.env.GEMINI_API_KEY,
       'gemini-2.0-flash',
     );
-    const uc = new UseCases(openAIChatClient, discordClient, chatRepository);
+    const uc = new UseCases(chatClient, discordClient, chatRepository);
     const interaction = await c.req.json<APIInteraction>();
 
     try {

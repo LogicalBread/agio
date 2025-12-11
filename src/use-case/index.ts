@@ -83,10 +83,6 @@ export class UseCases {
     if (currentMessages.length === 0) {
       await this.discordClient.sendMessage(
         discordResponseToken,
-        '記憶がありません。',
-      );
-      await this.discordClient.sendMessage(
-        discordResponseToken,
         `> ${targets[target].name}\n\n記憶をリセットしました。`,
       );
       await this.chatRepository.resetMessages(channelId, discordUserId, target);
