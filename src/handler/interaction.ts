@@ -29,7 +29,7 @@ app
     const chatClient = new OpenAiClient(
       'https://generativelanguage.googleapis.com/v1beta/openai/',
       c.env.GEMINI_API_KEY,
-      'gemini-2.0-flash',
+      'gemini-flash-latest',
     );
     const uc = new UseCases(chatClient, discordClient, chatRepository);
     const interaction = await c.req.json<APIInteraction>();
